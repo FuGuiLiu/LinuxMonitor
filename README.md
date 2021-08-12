@@ -2,7 +2,7 @@
 
 > 此 demo 主要演示了 Spring Boot 如何集成 WebSocket，实现后端主动往前端推送数据。网上大部分websocket的例子都是聊天室，本例主要是推送服务器状态信息。前端页面基于vue和element-ui实现。
 
-## 1. 代码
+## 1. 代码  
 
 ### 1.1. pom.xml
 
