@@ -20,11 +20,113 @@
         .sysFile:last-child {
             margin-bottom: 0;
         }
+
+        .el-header, .el-footer {
+            /*background-color: rgba(0, 123, 255, 0.3);*/
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .el-aside {
+            background-color: rgba(0, 123, 255, 0.7);
+            color: #333;
+            text-align: center;
+            line-height: 200px;
+        }
+
+        .el-main {
+            background-color: rgba(0, 123, 255, 0.7);
+            color: #333;
+            text-align: center;
+            line-height: 160px;
+        }
+
+        body > .el-container {
+            margin-bottom: 40px;
+        }
+
+        .el-container:nth-child(5) .el-aside,
+        .el-container:nth-child(6) .el-aside {
+            line-height: 260px;
+        }
+
+        .el-container:nth-child(7) .el-aside {
+            line-height: 320px;
+        }
+
+        #big_head {
+            font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+            font-size: 30px;
+        }
+
+        .el-row {
+            margin-bottom: 20px;
+
+        &
+        :last-child {
+            margin-bottom: 0;
+        }
+
+        }
+        .el-col {
+            border-radius: 4px;
+        }
+
+        .bg-purple-dark {
+            background: #99a9bf;
+        }
+
+        .bg-purple {
+            background: #d3dce6;
+        }
+
+        .bg-purple-light {
+            background: #e5e9f2;
+        }
+
+        .grid-content {
+            border-radius: 4px;
+            min-height: 36px;
+        }
+
+        .row-bg {
+            padding: 10px 0;
+            background-color: #f9fafc;
+        }
     </style>
 </head>
 <body>
 <div id="app">
     <el-container>
+        <el-header>
+            <span id="big_head">服务器状态监控系统</span>
+        </el-header>
+        <el-main>
+
+            <el-row :gutter="30">
+                <el-col :span="6">
+                    <div style="height: 260px;" class="grid-content bg-purple"></div>
+                </el-col>
+                <el-col :span="6">
+                    <div class="grid-content bg-purple"></div>
+                </el-col>
+                <el-col :span="6">
+                    <div class="grid-content bg-purple"></div>
+                </el-col>
+                <el-col :span="6">
+                    <div class="grid-content bg-purple"></div>
+                </el-col>
+            </el-row>
+
+        </el-main>
+        <el-footer>Footer</el-footer>
+    </el-container>
+
+
+    <el-container>
+        <!--服务器图标统计信息-->
+        <div id="cpu_chart_div" style="width: 100%;height: 500px"></div>
         <el-header>
             <el-button @click="_initSockJs" type="primary" :disabled="isConnected">手动连接</el-button>
             <el-button @click="_destroySockJs" type="danger" :disabled="!isConnected">断开连接</el-button>
@@ -114,14 +216,16 @@
 <script src="https://cdn.bootcss.com/vue/2.5.21/vue.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.11/index.js"></script>
 <script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js"></script>
 <script>
-    const wsHost = "http://localhost:8080/demo/notification";
+    const wsHost = "http://localhost:8080/notification";
     const wsTopic = "/topic/server";
 
     const app = new Vue({
         el: '#app',
         data: function () {
             return {
+                chart: {},
                 isConnected: false,
                 stompClient: {},
                 socket: {},
@@ -136,7 +240,7 @@
         },
         methods: {
             _getServerInfo() {
-                axios.get('/demo/server')
+                axios.get('/server')
                     .then((response) => {
                         this.server = response.data
                     });
@@ -154,6 +258,7 @@
                     // 另外再注册一下消息推送
                     this.stompClient.subscribe(wsTopic, (response) => {
                         this.server = JSON.parse(response.body);
+                        this._initialCharts();
                     });
                 });
             },
@@ -173,15 +278,113 @@
                 }
                 console.log('websocket断开成功！');
                 this.$message.error('websocket断开成功！');
+            },
+            _initialCharts() {
+                var myChart = echarts.init(document.getElementById("cpu_chart_div"), 'macarons');
+                // alert(this.server.cpu[0].key);
+                myChart.setOption({
+                    series: [{
+                        type: 'gauge',
+                        startAngle: 90,
+                        endAngle: -270,
+                        pointer: {
+                            show: false
+                        },
+                        progress: {
+                            show: true,
+                            overlap: false,
+                            roundCap: false,
+                            clip: false,
+                            itemStyle: {
+                                borderWidth: 1,
+                                borderColor: '#464646',
+                            }
+                        },
+                        axisLine: {
+
+                            lineStyle: {
+                                width: 40,
+                            }
+                        },
+                        splitLine: {
+                            show: false,
+                            distance: 0,
+                            length: 10,
+                            // color: '#EE6666',
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLabel: {
+                            show: false,
+                            distance: 50
+                        },
+                        data: [{
+                            value: 20,
+                            name: 'CPU当前空闲率',
+                            title: {
+                                offsetCenter: ['0%', '-60%']
+                            },
+                            detail: {
+                                offsetCenter: ['0%', '-45%'],
+                            }
+                        },
+                            {
+                                value: 40,
+                                name: 'CPU用户使用率',
+                                title: {
+                                    offsetCenter: ['0%', '-25%']
+                                },
+                                detail: {
+                                    offsetCenter: ['0%', '-10%'],
+                                }
+                            },
+                            {
+                                value: 60,
+                                name: 'CPU当前等待率',
+                                title: {
+                                    offsetCenter: ['0%', '15%']
+                                },
+                                detail: {
+                                    offsetCenter: ['0%', '30%'],
+                                }
+                            }, {
+                                value: 100,
+                                name: 'CPU系统使用率',
+                                title: {
+                                    offsetCenter: ['0%', '50%']
+                                },
+                                detail: {
+                                    offsetCenter: ['0%', '66%'],
+                                }
+                            }
+                        ],
+                        title: {
+                            fontSize: 14
+                        },
+                        detail: {
+                            width: 50,
+                            height: 14,
+                            fontSize: 14,
+                            color: 'auto',
+                            borderColor: 'auto',
+                            borderRadius: 20,
+                            borderWidth: 1,
+                            formatter: '{value}%'
+                        }
+                    }]
+                });
             }
         },
         mounted() {
             this._initSockJs();
-        },
+            // this._initialCharts();
+        }
+        ,
         beforeDestroy() {
             this._destroySockJs();
         }
 
-    })
+    });
 </script>
 </html>
