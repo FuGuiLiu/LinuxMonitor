@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>服务器信息</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.11/theme-chalk/index.css" rel="stylesheet">
+    <link href="css/elementUI/element-ui.css" rel="stylesheet">
     <style>
         .el-row {
             margin-bottom: 20px;
@@ -29,14 +29,14 @@
         }
 
         .el-aside {
-            background-color: rgba(0, 123, 255, 0.7);
+            background-color: rgba(0, 123, 255, 0.5);
             color: #333;
             text-align: center;
             line-height: 200px;
         }
 
         .el-main {
-            background-color: rgba(0, 123, 255, 0.7);
+            /*background-color: rgba(0, 123, 255, 0.7);*/
             color: #333;
             text-align: center;
             line-height: 160px;
@@ -94,6 +94,14 @@
             padding: 10px 0;
             background-color: #f9fafc;
         }
+
+        .my-label {
+            background: #E1F3D8;
+        }
+
+        .my-content {
+            background: #FDE2E2;
+        }
     </style>
 </head>
 <body>
@@ -102,121 +110,80 @@
         <el-header>
             <span id="big_head">服务器状态监控系统</span>
         </el-header>
-        <el-main>
-
-            <el-row :gutter="30">
-                <el-col :span="6">
-                    <div style="height: 260px;" class="grid-content bg-purple"></div>
-                </el-col>
-                <el-col :span="6">
-                    <div class="grid-content bg-purple"></div>
-                </el-col>
-                <el-col :span="6">
-                    <div class="grid-content bg-purple"></div>
-                </el-col>
-                <el-col :span="6">
-                    <div class="grid-content bg-purple"></div>
-                </el-col>
-            </el-row>
-
-        </el-main>
-        <el-footer>Footer</el-footer>
-    </el-container>
-
-
-    <el-container>
-        <!--服务器图标统计信息-->
-        <div id="cpu_chart_div" style="width: 100%;height: 500px"></div>
         <el-header>
             <el-button @click="_initSockJs" type="primary" :disabled="isConnected">手动连接</el-button>
             <el-button @click="_destroySockJs" type="danger" :disabled="!isConnected">断开连接</el-button>
         </el-header>
-        <el-main>
-            <el-row :gutter="20">
+        <el-main style="box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);border-radius: 30px">
+            <el-row :gutter="30">
                 <el-col :span="12">
-                    <el-card>
-                        <div slot="header">
-                            <span>CPU信息</span>
+                    <div>
+                        <el-tag>CPU核心数量:{{server.cpu[0].value}}</el-tag>
+                        <div id="cpu_chart_div" style="width: 100%;height: 500px">
                         </div>
-                        <el-table size="small" border :data="server.cpu" style="width: 100%">
-                            <el-table-column prop="key" label="属性">
-                            </el-table-column>
-                            <el-table-column prop="value" label="值">
-                            </el-table-column>
-                        </el-table>
-                    </el-card>
+                    </div>
                 </el-col>
                 <el-col :span="12">
-                    <el-card>
-                        <div slot="header">
-                            <span>内存信息</span>
+                    <div>
+                        <el-tag>内存总量:{{server.mem[0].value}}</el-tag>
+                        <div id="memory_chart_div" style="width: 100%;height: 500px">
                         </div>
-                        <el-table size="small" border :data="server.mem" style="width: 100%">
-                            <el-table-column prop="key" label="属性">
-                            </el-table-column>
-                            <el-table-column prop="value" label="值">
-                            </el-table-column>
-                        </el-table>
-                    </el-card>
+                    </div>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="24">
-                    <el-card>
-                        <div slot="header">
-                            <span>服务器信息</span>
-                        </div>
-                        <el-table size="small" border :data="server.sys" style="width: 100%">
-                            <el-table-column prop="key" label="属性">
-                            </el-table-column>
-                            <el-table-column prop="value" label="值">
-                            </el-table-column>
-                        </el-table>
-                    </el-card>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-card>
-                        <div slot="header">
-                            <span>Java虚拟机信息</span>
-                        </div>
-                        <el-table size="small" border :data="server.jvm" style="width: 100%">
-                            <el-table-column prop="key" label="属性">
-                            </el-table-column>
-                            <el-table-column prop="value" label="值">
-                            </el-table-column>
-                        </el-table>
-                    </el-card>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-card>
-                        <div slot="header">
-                            <span>磁盘状态</span>
-                        </div>
-                        <div class="sysFile" v-for="(item,index) in server.sysFile" :key="index">
-                            <el-table size="small" border :data="item" style="width: 100%">
-                                <el-table-column prop="key" label="属性">
-                                </el-table-column>
-                                <el-table-column prop="value" label="值">
-                                </el-table-column>
-                            </el-table>
-                        </div>
-                    </el-card>
-                </el-col>
+                <el-container>
+                    <el-aside width="200px">磁盘使用状况</el-aside>
+                    <el-main id="disk_status_main">
+                        <el-descriptions title="" :column="3" border
+                                         style="margin-bottom: 5%;" v-for="(item) of server.sysFile">
+                            <el-descriptions-item :label="item[0].key" label-class-name="my-label">{{item[0].value}}
+                            </el-descriptions-item>
+                            <el-descriptions-item :label="item[1].key">{{item[1].value}}</el-descriptions-item>
+                            <el-descriptions-item :label="item[2].key">{{item[2].value}}</el-descriptions-item>
+                            <el-descriptions-item :label="item[3].key">
+                                <el-tag size="small">{{item[3].value}}</el-tag>
+                            </el-descriptions-item>
+                            <el-descriptions-item :label="item[4].key">
+                                <el-tag size="small">{{item[4].value}}</el-tag>
+                            </el-descriptions-item>
+                            <el-descriptions-item :label="item[5].key">
+                                <el-tag size="small">{{item[5].value}}</el-tag>
+                            </el-descriptions-item>
+                            <el-descriptions-item :label="item[6].key">
+                                <div v-if="removePercentSign(item[6].value)<80 && removePercentSign(item[6].value)>30">
+                                    <el-progress :text-inside="true" :stroke-width="26"
+                                                 :percentage="removePercentSign(item[6].value)"></el-progress>
+                                </div>
+                                <div v-else-if="removePercentSign(item[6].value)>80">
+                                    <el-progress :text-inside="true" :stroke-width="26"
+                                                 :percentage="removePercentSign(item[6].value)"
+                                                 status="exception"></el-progress>
+                                </div>
+                                <div v-else-if="removePercentSign(item[6].value)<30">
+                                    <el-progress :text-inside="true" :stroke-width="26"
+                                                 :percentage="removePercentSign(item[6].value)"
+                                                 status="success"></el-progress>
+                                </div>
+                            </el-descriptions-item>
+                        </el-descriptions>
+                        <!--                        <el-progress :text-inside="true" :stroke-width="24" :percentage="100" status="success"></el-progress>-->
+                        <!--                        <el-progress :text-inside="true" :stroke-width="22" :percentage="80" status="warning"></el-progress>-->
+                        <!--                        <el-progress :text-inside="true" :stroke-width="20" :percentage="50" status="exception"></el-progress>-->
+                    </el-main>
+                </el-container>
             </el-row>
         </el-main>
+        <el-footer>Footer</el-footer>
     </el-container>
 </div>
 </body>
 <script src="js/sockjs.min.js"></script>
 <script src="js/stomp.js"></script>
-<script src="https://cdn.bootcss.com/vue/2.5.21/vue.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/element-ui/2.4.11/index.js"></script>
-<script src="https://cdn.bootcss.com/axios/0.19.0-beta.1/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.1.2/dist/echarts.min.js"></script>
+<script src="js/vue/vue.min.js"></script>
+<script src="js/axios/axios.min.js"></script>
+<script src="js/elementUI/element-ui.js"></script>
+<script src="js/echarts/echarts.min.js"></script>
 <script>
     const wsHost = "http://localhost:8080/notification";
     const wsTopic = "/topic/server";
@@ -225,7 +192,159 @@
         el: '#app',
         data: function () {
             return {
-                chart: {},
+                myChart_CPU: {
+                    series: [{
+                        type: 'gauge',
+                        startAngle: 90,
+                        endAngle: -270,
+                        pointer: {
+                            show: false
+                        },
+                        progress: {
+                            show: true,
+                            overlap: false,
+                            roundCap: false,
+                            clip: false,
+                            itemStyle: {
+                                borderWidth: 1,
+                                borderColor: '#464646',
+                            }
+                        },
+                        axisLine: {
+
+                            lineStyle: {
+                                width: 40,
+                            }
+                        },
+                        splitLine: {
+                            show: false,
+                            distance: 0,
+                            length: 10,
+                            // color: '#EE6666',
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLabel: {
+                            show: false,
+                            distance: 50
+                        },
+                        data: [{
+                            value: 0,
+                            name: 'CPU当前空闲率',
+                            title: {
+                                offsetCenter: ['0%', '-60%']
+                            },
+                            detail: {
+                                offsetCenter: ['0%', '-45%'],
+                            }
+                        },
+                            {
+                                value: 0,
+                                name: 'CPU用户使用率',
+                                title: {
+                                    offsetCenter: ['0%', '-25%']
+                                },
+                                detail: {
+                                    offsetCenter: ['0%', '-10%'],
+                                }
+                            },
+                            {
+                                value: 0,
+                                name: 'CPU当前等待率',
+                                title: {
+                                    offsetCenter: ['0%', '15%']
+                                },
+                                detail: {
+                                    offsetCenter: ['0%', '30%'],
+                                }
+                            }, {
+                                value: 0,
+                                name: 'CPU系统使用率',
+                                title: {
+                                    offsetCenter: ['0%', '50%']
+                                },
+                                detail: {
+                                    offsetCenter: ['0%', '66%'],
+                                }
+                            }
+                        ],
+                        title: {
+                            fontSize: 14
+                        },
+                        detail: {
+                            width: 50,
+                            height: 14,
+                            fontSize: 14,
+                            color: 'auto',
+                            borderColor: 'auto',
+                            borderRadius: 20,
+                            borderWidth: 1,
+                            formatter: '{value}%'
+                        }
+                    }]
+                },
+                myChart_Memory: {
+                    series: [{
+                        type: 'gauge',
+                        anchor: {
+                            show: true,
+                            showAbove: true,
+                            size: 18,
+                            itemStyle: {
+                                color: '#FAC858'
+                            }
+                        },
+                        pointer: {
+                            icon: 'path://M2.9,0.7L2.9,0.7c1.4,0,2.6,1.2,2.6,2.6v115c0,1.4-1.2,2.6-2.6,2.6l0,0c-1.4,0-2.6-1.2-2.6-2.6V3.3C0.3,1.9,1.4,0.7,2.9,0.7z',
+                            width: 8,
+                            length: '80%',
+                            offsetCenter: [0, '8%']
+                        },
+
+                        progress: {
+                            show: true,
+                            overlap: true,
+                            roundCap: true
+                        },
+                        axisLine: {
+                            roundCap: true
+                        },
+                        data: [{
+                            value: 0,
+                            name: '已用内存',
+                            title: {
+                                offsetCenter: ['-40%', '80%']
+                            },
+                            detail: {
+                                offsetCenter: ['-40%', '95%']
+                            }
+                        },
+                            {
+                                value: 0,
+                                name: '剩余内存',
+                                title: {
+                                    offsetCenter: ['40%', '80%']
+                                },
+                                detail: {
+                                    offsetCenter: ['40%', '95%']
+                                }
+                            }
+                        ],
+                        title: {
+                            fontSize: 14
+                        },
+                        detail: {
+                            width: 40,
+                            height: 14,
+                            fontSize: 14,
+                            color: '#fff',
+                            backgroundColor: 'auto',
+                            borderRadius: 3,
+                            formatter: '{value}%'
+                        }
+                    }]
+                },
                 isConnected: false,
                 stompClient: {},
                 socket: {},
@@ -280,100 +399,28 @@
                 this.$message.error('websocket断开成功！');
             },
             _initialCharts() {
-                var myChart = echarts.init(document.getElementById("cpu_chart_div"), 'macarons');
-                // alert(this.server.cpu[0].key);
-                myChart.setOption({
-                    series: [{
-                        type: 'gauge',
-                        startAngle: 90,
-                        endAngle: -270,
-                        pointer: {
-                            show: false
-                        },
-                        progress: {
-                            show: true,
-                            overlap: false,
-                            roundCap: false,
-                            clip: false,
-                            itemStyle: {
-                                borderWidth: 1,
-                                borderColor: '#464646',
-                            }
-                        },
-                        axisLine: {
+                // CPU信息展示
+                var myChart_cpu_chart_div = echarts.init(document.getElementById("cpu_chart_div"), 'macarons');
+                // 内存信息展示
+                var myChart_memory_chart_div = echarts.init(document.getElementById("memory_chart_div"), 'macarons');
+                // 磁盘信息展示
+                // disk_chart_div
+                // 设置CPU当前空闲率
+                this.myChart_CPU.series[0].data[0].value = removePercentSign(this.server.cpu[5].value);
+                // 设置CPU用户使用率
+                this.myChart_CPU.series[0].data[1].value = removePercentSign(this.server.cpu[3].value);
+                // 设置CPU当前等待率
+                this.myChart_CPU.series[0].data[2].value = removePercentSign(this.server.cpu[4].value);
+                // 设置CPU系统使用率
+                this.myChart_CPU.series[0].data[3].value = removePercentSign(this.server.cpu[2].value);
 
-                            lineStyle: {
-                                width: 40,
-                            }
-                        },
-                        splitLine: {
-                            show: false,
-                            distance: 0,
-                            length: 10,
-                            // color: '#EE6666',
-                        },
-                        axisTick: {
-                            show: false
-                        },
-                        axisLabel: {
-                            show: false,
-                            distance: 50
-                        },
-                        data: [{
-                            value: 20,
-                            name: 'CPU当前空闲率',
-                            title: {
-                                offsetCenter: ['0%', '-60%']
-                            },
-                            detail: {
-                                offsetCenter: ['0%', '-45%'],
-                            }
-                        },
-                            {
-                                value: 40,
-                                name: 'CPU用户使用率',
-                                title: {
-                                    offsetCenter: ['0%', '-25%']
-                                },
-                                detail: {
-                                    offsetCenter: ['0%', '-10%'],
-                                }
-                            },
-                            {
-                                value: 60,
-                                name: 'CPU当前等待率',
-                                title: {
-                                    offsetCenter: ['0%', '15%']
-                                },
-                                detail: {
-                                    offsetCenter: ['0%', '30%'],
-                                }
-                            }, {
-                                value: 100,
-                                name: 'CPU系统使用率',
-                                title: {
-                                    offsetCenter: ['0%', '50%']
-                                },
-                                detail: {
-                                    offsetCenter: ['0%', '66%'],
-                                }
-                            }
-                        ],
-                        title: {
-                            fontSize: 14
-                        },
-                        detail: {
-                            width: 50,
-                            height: 14,
-                            fontSize: 14,
-                            color: 'auto',
-                            borderColor: 'auto',
-                            borderRadius: 20,
-                            borderWidth: 1,
-                            formatter: '{value}%'
-                        }
-                    }]
-                });
+                // 设置内存已用内存
+                this.myChart_Memory.series[0].data[0].value = removePercentSign(this.server.mem[3].value);
+                // 设置内存剩余内存
+                this.myChart_Memory.series[0].data[1].value = (100 - removePercentSign(this.server.mem[3].value)).toFixed(2);
+
+                myChart_cpu_chart_div.setOption(this.myChart_CPU);
+                myChart_memory_chart_div.setOption(this.myChart_Memory);
             }
         },
         mounted() {
@@ -386,5 +433,10 @@
         }
 
     });
+
+    /*去掉百分号*/
+    function removePercentSign(number) {
+        return number.replace("%", '');
+    }
 </script>
 </html>
