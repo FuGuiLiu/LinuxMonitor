@@ -185,7 +185,9 @@
 <script src="js/elementUI/element-ui.js"></script>
 <script src="js/echarts/echarts.min.js"></script>
 <script>
-    const wsHost = "http://127.0.0.1:8080/notification";
+    let rootPath = getRootPath();
+    // console.log(rootPath);
+    const wsHost = rootPath + "/notification";
     const wsTopic = "/topic/server";
 
     const app = new Vue({
@@ -437,6 +439,20 @@
     /*去掉百分号*/
     function removePercentSign(number) {
         return number.replace("%", '');
+    }
+
+    // 获取当前服务器ip地址
+    function getRootPath() {
+        //获取当前网址，
+        var curPath = window.document.location.href;
+        //获取主机地址之后的目录，
+        var pathName = window.document.location.pathname;
+        var pos = curPath.indexOf(pathName);
+        //获取主机地址
+        var localhostPaht = curPath.substring(0, pos);
+        //获取带"/"的项目名，
+        var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+        return (localhostPaht);
     }
 </script>
 </html>
