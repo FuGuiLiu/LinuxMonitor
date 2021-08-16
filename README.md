@@ -1,3 +1,5 @@
+# 本项目后端来自 https://github.com/xkcoding/spring-boot-demo 对前端枯燥的页面就行UI修改
+
 # spring-boot-demo-websocket
 
 > 此 demo 主要演示了 Spring Boot 如何集成 WebSocket，实现后端主动往前端推送数据。网上大部分websocket的例子都是聊天室，本例主要是推送服务器状态信息。前端页面基于vue和element-ui实现。
@@ -15,7 +17,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-boot-demo-websocket</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>git config --global --get http.proxygit config --global --get http.proxy
 
     <name>spring-boot-demo-websocket</name>
     <description>Demo project for Spring Boot</description>
