@@ -3,8 +3,6 @@
 # spring-boot-demo-websocket
 
 > 此 demo 主要演示了 Spring Boot 如何集成 WebSocket，实现后端主动往前端推送数据。网上大部分websocket的例子都是聊天室，本例主要是推送服务器状态信息。前端页面基于vue和element-ui实现。
-> 
-## 注意 如果你想要上传到服务器上 请将 server.html 188行的 const wsHost = "http://127.0.0.1:8080/notification";   ip地址换成你的服务器ip地址
 
 ## 1. 代码  
 
