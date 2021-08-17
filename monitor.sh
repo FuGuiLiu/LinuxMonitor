@@ -69,7 +69,7 @@ echo "当前系统版本:$release"
 
 #判断文件是否存在
 if [ ! -f "$javaFile" ]; then
-	wget https://lfg0429.oss-cn-beijing.aliyuncs.com/jdk-8u301-linux-x64.tar.gz -P /usr/local/bin/java
+	wget https://www.dropbox.com/s/tkgsj7k7yjidbw5/jdk-8u301-linux-x64.tar.gz -P /usr/local/bin/java
 fi
 
 # 判断解压命令是否存在
@@ -121,7 +121,7 @@ done
 # 下载监控服务器
 
 if [ ! -f "$jarFile" ];then
-	      wget https://lfg0429.oss-cn-beijing.aliyuncs.com/monitor.jar -P /usr/local/bin/java/monitor
+	      wget https://www.dropbox.com/s/cahkzd9k78embix/monitor.jar -P /usr/local/bin/java/monitor
 fi
 
 #如果有程序正在运行则提示并退出
