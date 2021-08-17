@@ -1,4 +1,4 @@
-# 本项目后端来自 https://github.com/xkcoding/spring-boot-demo 对前端枯燥的页面就行UI修改
+# 本项目后端来自 https://github.com/xkcoding/spring-boot-demo 修改了前端UI
 
 # spring-boot-demo-websocket
 
