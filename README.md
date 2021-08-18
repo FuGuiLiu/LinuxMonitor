@@ -1,6 +1,6 @@
 # 声明
 > 本项目后端来自 https://github.com/xkcoding/spring-boot-demo  本人修改了前端UI界面,让服务器信息更直观
-
+> ## `目前仅支持 CentOS系统 和 Debian系统 Ubuntu系统测试不太稳定`
 ---
 
 # 功能介绍
