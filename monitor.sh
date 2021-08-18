@@ -38,15 +38,16 @@ echo -e "${blue}安装或卸载监控程序${cn}"
 echo -e "$blue----------------------------------------------$cn"
 echo -e "$blue| 1.   monitor install      - 安装 监控程序  |$cn"
 echo -e "$blue| 2.   monitor uninstall    - 卸载 监控程序  |$cn"
+echo -e "$blue| 3.   exit install         - 退出(我点错了) |$cn"
 echo -e "$blue----------------------------------------------$cn"
 
 #读取用户输入
-read -p "请选择(1-2)" chooseNumber
+read -p "请选择(1-3)" chooseNumber
 
 until
-	[ $chooseNumber -gt 0 -a $chooseNumber -lt 3 ]
+	[ $chooseNumber -gt 0 -a $chooseNumber -lt 4 ]
 do
-	read -p -e "请选择(1-2)" chooseNumber
+	read -p -e "请选择(1-3)" chooseNumber
 done
 
 if [ $chooseNumber -eq 1 ]; then
@@ -165,7 +166,7 @@ else
         echo -e "${red}java程序正在运行,请务开启多个程序${cn}"
 fi
 
-else
+elif [ $chooseNumber -eq 2 ]; then
     source /etc/profile
     #检测jdk是否安装
     echo -e "${red}卸载中...${cn}"
@@ -192,11 +193,12 @@ else
         echo -e "${blue}当前监控服务进程PID为:$pid${cn}"
         kill -9 $pid
       fi
-else
+  else
       echo -e "${yellow}============================================================${cn}"
       echo -e "${green}jdk未安装,无需进行安装${cn}"
       echo -e "${yellow}============================================================${cn}"
       exit 1
-fi
-
+  fi
+else
+  exit 1
 fi
