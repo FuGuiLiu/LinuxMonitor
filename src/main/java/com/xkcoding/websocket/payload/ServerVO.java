@@ -25,10 +25,10 @@ public class ServerVO {
 
     public ServerVO create(Server server) {
         cpu.add(CpuVO.create(server.getCpu()));
-        jvm.add(JvmVO.create(server.getJvm()));
+        // jvm.add(JvmVO.create(server.getJvm()));
         mem.add(MemVO.create(server.getMem()));
         sysFile.add(SysFileVO.create(server.getSysFiles()));
-        sys.add(SysVO.create(server.getSys()));
+        // sys.add(SysVO.create(server.getSys()));
         return null;
     }
 }

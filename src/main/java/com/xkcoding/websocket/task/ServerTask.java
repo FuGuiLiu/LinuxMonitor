@@ -32,7 +32,7 @@ public class ServerTask {
     /**
      * 按照标准时间来算，每隔 2s 执行一次
      */
-    @Scheduled(cron = "0/2 * * * * ?")
+    @Scheduled(cron = "*/5 * * * * ?")
     public void websocket() throws Exception {
         log.info("【推送消息】开始执行：{}", DateUtil.formatDateTime(new Date()));
         // 查询服务器状态

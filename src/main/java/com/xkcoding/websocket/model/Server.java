@@ -103,9 +103,9 @@ public class Server {
 
         setMemInfo(hal.getMemory());
 
-        setSysInfo();
+        // setSysInfo();
 
-        setJvmInfo();
+        // setJvmInfo();
 
         setSysFiles(si.getOperatingSystem());
     }
