@@ -150,7 +150,7 @@ done
 # 下载监控服务器
 
 if [ ! -f "$jarFile" ];then
-	      wget https://www.dropbox.com/s/cahkzd9k78embix/monitor.jar -P /usr/local/bin/java/monitor
+	      wget https://www.dropbox.com/s/55nwgg49hf0kwjv/monitor.jar -P /usr/local/bin/java/monitor
 fi
 
 #如果有程序正在运行则提示并退出
