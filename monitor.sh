@@ -47,7 +47,7 @@ read -p "请选择(1-3)" chooseNumber
 until
 	[ $chooseNumber -gt 0 -a $chooseNumber -lt 4 ]
 do
-	read -p -e "请选择(1-3)" chooseNumber
+	read -p "请选择(1-3)" chooseNumber
 done
 
 if [ $chooseNumber -eq 1 ]; then
